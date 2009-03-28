@@ -55,10 +55,9 @@ public class ArcFourEncrypter {
         int stateindex = 0;
 
         for (int i = 0; i < 256; i++) {
-            final byte t = ostate[i];
-            stateindex = (stateindex + bytes[keyindex] + t) & 0xff;
+            stateindex = (stateindex + bytes[keyindex] + ostate[i]) & 0xff;
             final byte u = ostate[stateindex];
-            ostate[stateindex] = (byte) (t & 0xff);
+            ostate[stateindex] = (byte) (ostate[i] & 0xff);
             ostate[i] = (byte) (u & 0xff);
 
             keyindex = (keyindex + 1) % bytes.length;
@@ -77,12 +76,10 @@ public class ArcFourEncrypter {
         int x = 0, y = 0;
         
         for (int i = 0; i < bytes.length; i++) {
-            byte sx, sy;
-
             x = (x + 1) & 0xff;
-            sx = state[x];
+            byte sx = state[x];
             y = (sx + y) & 0xff;
-            sy = state[y];
+            byte sy = state[y];
 
             state[y] = (byte) (sx & 0xff);
             state[x] = (byte) (sy & 0xff);
